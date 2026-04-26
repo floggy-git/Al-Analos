@@ -319,7 +319,7 @@ async function trainerSubmitDeposit(btn){
     toast('تم الإيداع','ok');
     await loadStudents();
     await trainerDashboard();
-  }else toast(r.message||'Error','err');
+  }else toast(r.message||'Error','err');}
 
 async function trainerSendReminder(btn){
   const student=$('trReminderStudent').value;
