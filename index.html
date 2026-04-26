@@ -45,18 +45,17 @@ if($('trInvoiceFrom')){
 
   setBtn(btn,true,'⏳');
 
-  // 1️⃣ إرسال الطلب (بدون انتظار رد)
-  await fetch(API,{
-    method:'POST',
-    mode:'no-cors',
-    body: JSON.stringify({
-      action:'studentLogin',
-      email,
-      phone
-    }),
-    headers:{'Content-Type':'text/plain;charset=utf-8'}
-  });
+  const r = await apiPost('studentLogin',{email,phone});
 
+  setBtn(btn,false);
+
+  if(!r.success) return toast(r.message || 'Login failed','err');
+
+  state.role = 'student';
+  state.user = r.student;
+
+  enterStudent();
+}
   // 2️⃣ جلب بيانات الطالب عبر GET (بدون CORS)
   try{
     const r = await fetch(API + '?action=getStudentDetailsByEmail&email=' + encodeURIComponent(email));
