@@ -33,11 +33,22 @@ if($('trInvoiceFrom')){
   m.setMonth(m.getMonth() - 1);
   $('trInvoiceFrom').value = m.toISOString().slice(0,10);
 
-  // مهم: لا يوجد min هنا حتى تستطيع اختيار تاريخ قديم
-  $('trInvoiceFrom').removeAttribute('min');
-  $('trInvoiceTo').removeAttribute('min');
-};if($('trInvoiceFrom')){let m=new Date();m.setMonth(m.getMonth()-1);$('trInvoiceFrom').value=m.toISOString().slice(0,10)}if($('trLessonTime'))$('trLessonTime').value=new Date().toTimeString().slice(0,5);trainerRenderPayMethods();trainerSetPayStatus('Paid')}
- async function studentLogin(btn){
+ // مهم: لا يوجد min هنا حتى تستطيع اختيار تاريخ قديم
+$('trInvoiceFrom').removeAttribute('min');
+$('trInvoiceTo').removeAttribute('min');
+};
+if($('trInvoiceFrom')){
+  let m=new Date();
+  m.setMonth(m.getMonth()-1);
+  $('trInvoiceFrom').value=m.toISOString().slice(0,10)
+}
+if($('trLessonTime')) $('trLessonTime').value=new Date().toTimeString().slice(0,5);
+trainerRenderPayMethods();
+trainerSetPayStatus('Paid');
+
+
+// ================= LOGIN =================
+async function studentLogin(btn){
   const email = $('sEmail').value.trim();
   const phone = $('sPhone').value.trim();
 
@@ -56,7 +67,10 @@ if($('trInvoiceFrom')){
 
   enterStudent();
 }
-  async function registerStudent(btn){
+
+
+// ================= REGISTER =================
+async function registerStudent(btn){
   const name = $('rName').value.trim();
   const email = $('rEmail').value.trim();
   const phone = $('rPhone').value.trim();
@@ -92,27 +106,11 @@ if($('trInvoiceFrom')){
     toast(r.message || 'Registration failed','err');
   }
 }
-  // 2️⃣ جلب بيانات الطالب عبر GET (بدون CORS)
-  try{
-    const r = await fetch(API + '?action=getStudentDetailsByEmail&email=' + encodeURIComponent(email));
-    const data = await r.json();
 
-    setBtn(btn,false);
 
-    if(!data.success){
-      return toast('❌ البيانات غير صحيحة','err');
-    }
-
-    state.role = 'student';
-    state.user = data.student;
-
-    enterStudent();
-
-  }catch(e){
-    setBtn(btn,false);
-    toast('❌ خطأ في الاتصال','err');
-  }
-}const student = $('trReminderStudent').value;
+// ================= REMINDER =================
+async function trainerSendReminder(btn){
+  const student = $('trReminderStudent').value;
   const amount = $('trReminderAmount').value;
   const message = $('trReminderMessage').value;
 
@@ -130,6 +128,9 @@ if($('trInvoiceFrom')){
   setBtn(btn,false);
   toast('تم إرسال التذكير','ok');
 }
+
+
+// ================= INVOICE =================
 async function trainerSendInvoice(btn){
   const student = $('trInvoiceStudent').value;
   const from = $('trInvoiceFrom').value;
