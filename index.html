@@ -56,6 +56,42 @@ if($('trInvoiceFrom')){
 
   enterStudent();
 }
+  async function registerStudent(btn){
+  const name = $('rName').value.trim();
+  const email = $('rEmail').value.trim();
+  const phone = $('rPhone').value.trim();
+  const car = $('rCar').value;
+  const lang = $('rLang').value;
+  const address = $('rAddress').value.trim();
+  const trainer = $('rTrainer').value;
+
+  if(!name || !email || !phone || !car){
+    return toast('أكمل الحقول','err');
+  }
+
+  setBtn(btn,true,'⏳');
+
+  const r = await apiPost('registerStudent',{
+    name,
+    email,
+    phone,
+    car,
+    lang,
+    address,
+    notes: trainer ? ('Preferred trainer: ' + trainer) : ''
+  }, false);
+
+  setBtn(btn,false);
+
+  if(r.success){
+    toast('تم إنشاء الحساب','ok');
+    switchAuth('student');
+    $('sEmail').value = email;
+    $('sPhone').value = phone;
+  } else {
+    toast(r.message || 'Registration failed','err');
+  }
+}
   // 2️⃣ جلب بيانات الطالب عبر GET (بدون CORS)
   try{
     const r = await fetch(API + '?action=getStudentDetailsByEmail&email=' + encodeURIComponent(email));
