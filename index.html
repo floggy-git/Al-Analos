@@ -129,7 +129,40 @@ async function trainerSendReminder(btn){
   toast('تم إرسال التذكير','ok');
 }
 
+function trainerSendInvoice(btn){
+  const student = $('trInvoiceStudent').value;
+  const from = $('trInvoiceFrom').value;
+  const to = $('trInvoiceTo').value;
+  const vatRate = Number($('trInvoiceVat').value);
 
+  if(!student || !from || !to) return toast('أكمل البيانات','err');
+
+  const s = state.students.find(x => x.name === student) || {};
+
+  setBtn(btn,true,'⏳');
+
+  fetch(API, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({
+      action: 'generateInvoice',
+      student,
+      email: s.email || '',
+      from,
+      to,
+      vatRate,
+      sendEmail: true
+    }),
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    }
+  });
+
+  setTimeout(() => {
+    setBtn(btn,false);
+    toast('✅ تم إرسال الفاتورة','ok');
+  }, 700);
+}
 // ================= INVOICE =================
 async function trainerSendInvoice(btn){
   const student = $('trInvoiceStudent').value;
