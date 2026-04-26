@@ -60,23 +60,34 @@ const API='https://script.google.com/macros/s/AKfycbyIApMAniy4Mqex_IevXg6RcayEd6
   trainerRenderPayMethods();
   trainerSetPayStatus('Paid');
 }
-
 async function studentLogin(btn){
-  const email=$('sEmail').value.trim();
-  const phone=$('sPhone').value.trim();
-  if(!email||!phone) return toast('أدخل الإيميل والهاتف','err');
+  const email = $('sEmail').value.trim();
+  const phone = $('sPhone').value.trim();
+
+  if(!email || !phone) return toast('أدخل الإيميل والهاتف','err');
 
   setBtn(btn,true,'⏳');
-  const r=await apiPost('studentLogin',{email,phone});
-  setBtn(btn,false);
 
-  if(!r.success) return toast(r.message||'Login failed','err');
+  try{
+    const r = await apiGet('studentLogin',{
+      email: email,
+      phone: phone
+    });
 
-  state.role='student';
-  state.user=r.student;
-  enterStudent();
+    setBtn(btn,false);
+
+    if(!r.success) return toast(r.message || 'Login failed','err');
+
+    state.role = 'student';
+    state.user = r.student;
+
+    enterStudent();
+
+  }catch(e){
+    setBtn(btn,false);
+    toast('Failed to fetch','err');
+  }
 }
-
 async function registerStudent(btn){
   const name=$('rName').value.trim();
   const email=$('rEmail').value.trim();
