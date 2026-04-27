@@ -102,25 +102,19 @@ async function studentLogin(btn){
 
   setBtn(btn,true,'⏳');
 
-  try{
-    const r = await apiGet('studentLogin',{
-      email: email,
-      phone: phone
-    });
+  const r = await apiGet('studentLogin',{
+    email: email,
+    phone: phone
+  });
 
-    setBtn(btn,false);
+  setBtn(btn,false);
 
-    if(!r.success) return toast(r.message || 'Login failed','err');
+  if(!r.success) return toast(r.message || 'Login failed','err');
 
-    state.role = 'student';
-    state.user = r.student;
+  state.role = 'student';
+  state.user = r.student;
 
-    enterStudent();
-
-  }catch(e){
-    setBtn(btn,false);
-    toast('Failed to fetch','err');
-  }
+  enterStudent();
 }
 async function registerStudent(btn){
   const name=$('rName').value.trim();
