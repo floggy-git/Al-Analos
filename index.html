@@ -102,10 +102,10 @@ async function studentLogin(btn){
 
   setBtn(btn,true,'⏳');
 
-  const r = await apiGet('studentLogin',{
-    email: email,
-    phone: phone
-  });
+  const r = await apiPost('studentLogin',{
+  email: email,
+  phone: phone
+});
 
   setBtn(btn,false);
 
