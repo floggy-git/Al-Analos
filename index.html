@@ -58,9 +58,10 @@ const API='https://script.google.com/macros/s/AKfycbysrOaTpjem6mTPvyWwenbwQoM_cM
     };
   }
 }
- function apiGet(action, params = {}) {
-  return apiPost(action, params);
-}
+ const r = await apiGet('studentLogin', {
+  email: email,
+  phone: phone
+});
   function showScreen(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');$('logoutBtn').classList.toggle('hidden',id==='loginScreen');$('studentNav').classList.toggle('active',id==='studentScreen');$('trainerNav').classList.toggle('active',id==='trainerScreen')}
   function switchAuth(tab){['student','register','trainer'].forEach(x=>{$('tab'+x[0].toUpperCase()+x.slice(1)).classList.toggle('active',x===tab);$('auth'+x[0].toUpperCase()+x.slice(1)).classList.toggle('hidden',x!==tab)})}
   function logout(){sessionStorage.clear();state.role=null;state.user=null;showScreen('loginScreen')}
